@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>준서 효은 아카이브</title>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --yellow: #FFE066; --yellow-light: #FFF5C0; --yellow-dark: #F5C800;
+  --pink: #FFB3C6; --pink-light: #FFE4EC; --pink-dark: #FF8FAB; --pink-deep: #FF5C8A;
+  --cork: #C8955C; --cork-dark: #A67240; --wood: #8B5E3C; --cream: #FFF9F0; --text: #3D2B1F;
+}
+body { font-family: 'Gaegu', cursive; background: var(--cream); min-height: 100vh; overflow-x: hidden; }
+
+/* ── HEADER ── */
+.site-header {
+  position: relative; text-align: center; padding: 2rem 1rem 1.5rem;
+  background: linear-gradient(160deg,#FFE4EC 0%,#FFF5C0 60%,#FFE4EC 100%);
+  border-bottom: 6px solid var(--wood); overflow: hidden;
+}
+.site-header::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image: radial-gradient(circle at 15% 40%,rgba(255,179,198,.35) 0%,transparent 45%),
+    radial-gradient(circle at 85% 30%,rgba(255,224,102,.45) 0%,transparent 45%);
+}
+.header-deco { position:absolute; font-size:1.4rem; animation:floatDeco 3s ease-in-out infinite; z-index:1; }
+.header-deco:nth-child(1){top:12px;left:6%;animation-delay:0s}
+.header-deco:nth-child(2){top:16px;right:8%;animation-delay:.7s}
+.header-deco:nth-child(3){bottom:14px;left:13%;animation-delay:1.3s}
+.header-deco:nth-child(4){bottom:10px;right:7%;animation-delay:.4s}
+.header-deco:nth-child(5){top:8px;left:44%;animation-delay:1s}
+@keyframes floatDeco{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-9px) rotate(6deg)}}
+.site-title { font-family:'Nanum Pen Script',cursive; font-size:clamp(2.2rem,6.5vw,4rem); color:var(--text); position:relative; z-index:2; text-shadow:3px 3px 0 var(--pink),7px 7px 0 rgba(255,179,198,.22); letter-spacing:.03em; line-height:1.15; }
+.site-subtitle { font-size:.95rem; color:var(--pink-deep); margin-top:.3rem; letter-spacing:.1em; position:relative; z-index:2; }
+
+/* ── ANNIVERSARY BANNER ── */
+.anni-banner {
+  background: linear-gradient(135deg,#fff0f5 0%,#fffbe6 100%);
+  border-bottom: 3px solid var(--pink);
+  padding: .9rem 1rem;
+  display: flex; flex-direction: column; align-items: center; gap: .45rem;
+}
+.dday-display {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: clamp(1.6rem,5vw,2.4rem);
+  color: var(--pink-deep);
+  letter-spacing: .02em;
+}
+.dday-display span { color: var(--text); font-size: .7em; }
+.anni-list {
+  display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center;
+}
+.anni-chip {
+  font-size: .78rem; padding: .22rem .7rem; border-radius: 99px;
+  display: flex; align-items: center; gap: .3rem; font-weight: 700;
+  white-space: nowrap;
+}
+.anni-chip.past   { background: #e8e8e8; color: #888; }
+.anni-chip.today  { background: var(--pink-deep); color: #fff; animation: pulse 1.2s ease-in-out infinite; }
+.anni-chip.future { background: var(--yellow-light); color: var(--cork-dark); border: 1.5px solid var(--yellow-dark); }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+
+/* ── TABS ── */
+.tabs-wrapper {
+  background: var(--wood); padding: .7rem 1rem;
+  display: flex; gap: .4rem; overflow-x: auto; justify-content: center; flex-wrap: wrap;
+}
+.tabs-wrapper::-webkit-scrollbar{display:none}
+.tab-btn { font-family:'Gaegu',cursive; font-size:.9rem; padding:.26rem .88rem; border-radius:99px; border:2px solid rgba(255,255,255,.3); background:rgba(255,255,255,.13); color:#fff; cursor:pointer; transition:all .2s; white-space:nowrap; }
+.tab-btn:hover { background:rgba(255,255,255,.28); transform:scale(1.06); }
+.tab-btn.active { background:var(--yellow); color:var(--text); border-color:var(--yellow-dark); font-weight:700; }
+
+/* ── CALENDAR NAV ── */
+.cal-nav {
+  background: var(--pink-light); border-bottom: 3px dashed var(--pink-dark);
+  padding: .8rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+}
+.cal-nav-left, .cal-nav-right { display:flex; align-items:center; gap:.4rem; }
+.nav-arrow {
+  font-family:'Gaegu',cursive; font-size:1.2rem; padding:.28rem .75rem;
+  border-radius:99px; border:2px solid var(--pink-dark); background:#fff;
+  color:var(--text); cursor:pointer; transition:all .2s; line-height:1;
+}
+.nav-arrow:hover { background:var(--pink-dark); color:#fff; transform:scale(1.1); }
+.cal-date-label {
+  font-family:'Nanum Pen Script',cursive; font-size:1.35rem; color:var(--text);
+  min-width:130px; text-align:center;
+}
+.today-btn {
+  font-family:'Gaegu',cursive; font-size:.82rem; padding:.22rem .8rem;
+  border-radius:99px; border:2px solid var(--pink-deep); background:var(--pink-deep);
+  color:#fff; cursor:pointer; transition:all .2s;
+}
+.today-btn:hover { transform:scale(1.06); }
+.upload-btn {
+  font-family:'Gaegu',cursive; font-size:.95rem; padding:.45rem 1.3rem;
+  border-radius:99px; border:2.5px solid var(--pink-dark); background:var(--yellow);
+  color:var(--text); cursor:pointer; transition:all .2s;
+  box-shadow:0 3px 0 var(--yellow-dark); display:flex; align-items:center; gap:.4rem;
+}
+.upload-btn:hover  { transform:translateY(-2px); box-shadow:0 5px 0 var(--yellow-dark); }
+.upload-btn:active { transform:translateY(1px);  box-shadow:0 2px 0 var(--yellow-dark); }
+
+/* ── CORKBOARD ── */
+.corkboard {
+  position:relative; min-height:500px; padding:3rem 2rem 4rem;
+  background-color:var(--cork);
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.022) 3px,rgba(0,0,0,.022) 4px),
+    repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(0,0,0,.022) 3px,rgba(0,0,0,.022) 4px),
+    radial-gradient(ellipse at 25% 20%,rgba(222,184,138,.5) 0%,transparent 55%),
+    radial-gradient(ellipse at 75% 75%,rgba(155,110,60,.4) 0%,transparent 50%);
+  border:8px solid var(--wood);
+  box-shadow:inset 0 0 50px rgba(0,0,0,.22),0 8px 32px rgba(0,0,0,.28);
+}
+.corkboard::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle at 1px 1px,rgba(139,94,60,.18) 1px,transparent 0);
+  background-size:16px 16px;
+}
+.cards-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(188px,1fr));
+  gap:3rem 2.2rem; position:relative; z-index:1;
+}
+.empty-board { grid-column:1/-1; text-align:center; color:rgba(255,255,255,.65); padding:4rem 2rem; }
+.empty-board .big { font-size:3.5rem; display:block; margin-bottom:.8rem; }
+.empty-board p { font-size:1.05rem; line-height:1.9; }
+
+/* ── CARD ── */
+.card-wrapper { display:flex; flex-direction:column; align-items:center; position:relative; animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both; }
+@keyframes popIn { from{opacity:0;transform:scale(.5) rotate(-8deg)} to{opacity:1} }
+.pushpin {
+  position:absolute; top:-15px; z-index:10;
+  width:24px; height:24px; border-radius:50%;
+  background:radial-gradient(circle at 35% 32%,rgba(255,255,255,.9) 0%,var(--pin-color,#FF5C8A) 45%,rgba(0,0,0,.35) 100%);
+  box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 -2px 4px rgba(0,0,0,.2);
+  border:1.5px solid rgba(255,255,255,.4);
+}
+.flip-card { width:100%; perspective:900px; cursor:pointer; }
+.flip-inner { position:relative; width:100%; transform-style:preserve-3d; transition:transform .65s cubic-bezier(.4,.2,.2,1); }
+.flip-card.flipped .flip-inner { transform:rotateY(180deg); }
+.card-front, .card-back { backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:3px; box-shadow:4px 10px 24px rgba(0,0,0,.38),0 2px 6px rgba(0,0,0,.18); }
+.card-front { background:#fff; padding:9px 9px 36px; width:100%; transform:rotate(var(--tilt,0deg)); transition:transform .2s; }
+.card-front:hover { transform:rotate(0deg) scale(1.03); }
+.card-front img { width:100%; aspect-ratio:1; object-fit:cover; display:block; border-radius:1px; }
+.card-front .photo-title { text-align:center; margin-top:5px; font-family:'Nanum Pen Script',cursive; font-size:1.1rem; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:0 4px; }
+.card-back {
+  position:absolute; inset:0; transform:rotateY(180deg);
+  padding:14px 13px 10px; display:flex; flex-direction:column; gap:7px;
+  background:var(--note-bg,#FFF5C0); border-top:4px solid var(--note-accent,#F5C800);
+}
+.card-back::after {
+  content:''; position:absolute; inset:40px 10px 10px; pointer-events:none;
+  background-image:repeating-linear-gradient(transparent,transparent 22px,rgba(0,0,0,.07) 22px,rgba(0,0,0,.07) 23px);
+}
+.back-category { font-size:.72rem; color:var(--note-accent,#F5C800); font-weight:700; letter-spacing:.06em; border-bottom:1px dashed rgba(0,0,0,.1); padding-bottom:5px; position:relative; z-index:1; }
+.back-title { font-size:1.1rem; font-weight:700; color:var(--text); line-height:1.3; position:relative; z-index:1; }
+.back-memo { font-size:.88rem; color:#5a4035; flex:1; line-height:1.7; overflow-y:auto; position:relative; z-index:1; }
+.back-date { font-size:.72rem; color:#bbb; text-align:right; position:relative; z-index:1; }
+.back-hint { font-size:.68rem; color:rgba(0,0,0,.25); text-align:center; position:relative; z-index:1; }
+.back-delete { position:absolute; top:6px; right:7px; background:none; border:none; font-size:.8rem; color:rgba(0,0,0,.25); cursor:pointer; z-index:2; padding:2px 4px; border-radius:4px; transition:color .2s,background .2s; }
+.back-delete:hover { color:#e00; background:rgba(255,0,0,.08); }
+
+/* ── MODAL ── */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(61,43,31,.62); backdrop-filter:blur(5px); z-index:100; align-items:center; justify-content:center; padding:1rem; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:#fff; border-radius:22px; padding:1.8rem 1.7rem 1.6rem; width:100%; max-width:400px; box-shadow:0 24px 64px rgba(0,0,0,.3); border-top:6px solid var(--pink-dark); position:relative; animation:slideUp .32s cubic-bezier(.34,1.56,.64,1); }
+@keyframes slideUp { from{opacity:0;transform:translateY(50px) scale(.94)} to{opacity:1;transform:none} }
+.modal-top-title { font-family:'Nanum Pen Script',cursive; font-size:1.6rem; color:var(--text); text-align:center; margin-bottom:1rem; }
+.modal-close { position:absolute; top:.8rem; right:1rem; background:none; border:none; font-size:1.3rem; cursor:pointer; color:#ccc; line-height:1; }
+.modal-close:hover { color:#888; }
+.preview-wrap { width:100%; aspect-ratio:1; background:var(--yellow-light); border-radius:14px; overflow:hidden; margin-bottom:.9rem; border:2.5px dashed var(--yellow-dark); display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer; }
+.preview-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+.preview-placeholder { text-align:center; color:var(--cork-dark); font-size:.9rem; }
+.preview-placeholder span { font-size:2rem; display:block; margin-bottom:.3rem; }
+.preview-wrap input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+.form-row { margin-bottom:.8rem; }
+.form-label { display:block; font-size:.82rem; color:var(--cork-dark); margin-bottom:.26rem; font-weight:700; }
+.form-input, .form-select, .form-textarea { width:100%; font-family:'Gaegu',cursive; font-size:1rem; padding:.44rem .74rem; border-radius:10px; border:2px solid var(--pink); background:var(--pink-light); color:var(--text); outline:none; transition:border-color .2s,background .2s; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--pink-deep); background:#fff; }
+.form-textarea { resize:vertical; min-height:76px; }
+.modal-actions { display:flex; gap:.6rem; margin-top:1rem; }
+.btn-save { flex:1; font-family:'Gaegu',cursive; font-size:1rem; padding:.55rem; border-radius:99px; border:2.5px solid var(--pink-deep); background:var(--pink-deep); color:#fff; cursor:pointer; transition:all .2s; box-shadow:0 4px 0 #c0004a; }
+.btn-save:hover  { transform:translateY(-2px); box-shadow:0 6px 0 #c0004a; }
+.btn-save:active { transform:translateY(2px);  box-shadow:0 2px 0 #c0004a; }
+.btn-cancel { font-family:'Gaegu',cursive; font-size:1rem; padding:.55rem 1.1rem; border-radius:99px; border:2.5px solid #e0e0e0; background:#fff; color:var(--text); cursor:pointer; transition:all .2s; }
+.btn-cancel:hover { background:#f5f5f5; }
+.toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(60px); background:var(--text); color:#fff; padding:.6rem 1.5rem; border-radius:99px; font-family:'Gaegu',cursive; font-size:1rem; opacity:0; transition:all .3s; pointer-events:none; z-index:300; white-space:nowrap; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+@media(max-width:500px){
+  .cards-grid{grid-template-columns:repeat(2,1fr);gap:2.5rem 1.2rem}
+  .corkboard{padding:2.5rem 1rem 3rem}
+  .cal-nav{flex-wrap:wrap;justify-content:center;gap:.5rem}
+  .cal-date-label{min-width:110px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <span class="header-deco">🌸</span>
+  <span class="header-deco">⭐</span>
+  <span class="header-deco">🌼</span>
+  <span class="header-deco">🎀</span>
+  <span class="header-deco">✨</span>
+  <h1 class="site-title">준서 효은 아카이브</h1>
+  <p class="site-subtitle">✦ 우리의 소중한 순간들 ✦</p>
+</header>
+
+<!-- ANNIVERSARY BANNER -->
+<div class="anni-banner">
+  <div class="dday-display" id="ddayDisplay"></div>
+  <div class="anni-list" id="anniList"></div>
+</div>
+
+<!-- TABS -->
+<nav class="tabs-wrapper" id="tabs"></nav>
+
+<!-- CALENDAR NAV -->
+<div class="cal-nav">
+  <div class="cal-nav-left">
+    <button class="nav-arrow" id="prevDay">◀ 전날</button>
+    <button class="nav-arrow" id="prevMonth">◀◀ 월</button>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:.2rem">
+    <div class="cal-date-label" id="calDateLabel"></div>
+    <button class="today-btn" id="todayBtn">오늘로</button>
+  </div>
+  <div class="cal-nav-right">
+    <button class="nav-arrow" id="nextMonth">월 ▶▶</button>
+    <button class="nav-arrow" id="nextDay">다음날 ▶</button>
+  </div>
+</div>
+
+<!-- UPLOAD -->
+<div style="display:flex;justify-content:center;padding:.8rem 1rem;background:var(--pink-light);border-bottom:3px dashed var(--pink-dark)">
+  <button class="upload-btn" id="openModalBtn">📷 이 날에 사진 추가하기</button>
+</div>
+
+<!-- CORKBOARD -->
+<main class="corkboard">
+  <div class="cards-grid" id="cardsGrid"></div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <h2 class="modal-top-title">📌 사진 추가하기</h2>
+    <div class="preview-wrap">
+      <input type="file" id="fileInput" accept="image/*">
+      <div class="preview-placeholder" id="previewPlaceholder"><span>🖼️</span>클릭해서 사진 선택</div>
+      <img id="previewImg" style="display:none" alt="미리보기">
+    </div>
+    <div class="form-row">
+      <label class="form-label">카테고리</label>
+      <select class="form-select" id="catSelect"></select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">제목</label>
+      <input class="form-input" id="titleInput" type="text" placeholder="예: 첫 번째 데이트 🌸" maxlength="30">
+    </div>
+    <div class="form-row">
+      <label class="form-label">메모</label>
+      <textarea class="form-textarea" id="memoInput" placeholder="이 날의 기억을 적어봐요 💕" maxlength="200"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="cancelBtn">취소</button>
+      <button class="btn-save" id="saveBtn">📌 저장하기</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── CONSTANTS ── */
+const START_DATE = new Date('2025-06-06'); // 사귄 날
+const CATS = [
+  {id:'all',    label:'🌸 전체',    pin:'#FF5C8A', noteBg:'#FFE4EC', noteAccent:'#FF8FAB'},
+  {id:'red',    label:'🍓 빨강',    pin:'#CC2200', noteBg:'#FFE4E4', noteAccent:'#FF5C5C'},
+  {id:'yellow', label:'🌻 노랑',    pin:'#C89A00', noteBg:'#FFF5C0', noteAccent:'#F5C800'},
+  {id:'green',  label:'🌿 초록',    pin:'#2D7A4F', noteBg:'#E4F5EC', noteAccent:'#4CAF7A'},
+  {id:'blue',   label:'💙 파랑',    pin:'#2563EB', noteBg:'#E4ECFF', noteAccent:'#5B8FFF'},
+  {id:'black',  label:'🖤 검정',    pin:'#222',    noteBg:'#F0F0F0', noteAccent:'#555'   },
+  {id:'idea',   label:'💡 아이디어', pin:'#9333EA', noteBg:'#F3E4FF', noteAccent:'#C97BFF'},
+];
+const TILTS = [-3,-1.5,0,1.5,3,-2.5,2,-1,2.5];
+
+/* ── STATE ── */
+let photos = [];
+try { photos = JSON.parse(localStorage.getItem('junseo_heoeun_v3') || '[]'); } catch(e) {}
+let activeTab = 'all';
+let pendingImgSrc = null;
+
+// viewDate: currently viewed date as {y,m,d}
+const today = new Date();
+let viewDate = {y: today.getFullYear(), m: today.getMonth()+1, d: today.getDate()};
+
+/* ── DATE HELPERS ── */
+function dateKey(y,m,d) { return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function todayKey() { return dateKey(today.getFullYear(), today.getMonth()+1, today.getDate()); }
+function viewKey() { return dateKey(viewDate.y, viewDate.m, viewDate.d); }
+
+function addDays(base, n) {
+  const d = new Date(base); d.setDate(d.getDate() + n); return d;
+}
+function diffDays(a, b) {
+  // days from a to b (b - a)
+  const ms = new Date(b) - new Date(a);
+  return Math.floor(ms / 86400000);
+}
+function jsDate(y,m,d) { return new Date(y, m-1, d); }
+function fromViewDate() { return jsDate(viewDate.y, viewDate.m, viewDate.d); }
+
+/* ── ANNIVERSARY LOGIC ── */
+function buildAnniversaries() {
+  const milestones = [];
+  // 100일 단위 (100,200,…)
+  for (let i = 100; i <= 3650; i += 100) {
+    const d = addDays(START_DATE, i - 1);
+    milestones.push({ label: `+${i}일`, date: d });
+  }
+  // 1주년 단위
+  for (let y = 1; y <= 10; y++) {
+    const d = new Date(START_DATE);
+    d.setFullYear(d.getFullYear() + y);
+    milestones.push({ label: `${y}주년`, date: d });
+  }
+  milestones.sort((a,b) => a.date - b.date);
+  return milestones;
+}
+const ANNIVERSARIES = buildAnniversaries();
+
+function renderAnniBanner() {
+  const now = new Date();
+  now.setHours(0,0,0,0);
+
+  // D+day from START_DATE to today
+  const daysSince = diffDays(START_DATE, now) + 1; // +1 so day1 = 사귄 날
+  document.getElementById('ddayDisplay').innerHTML =
+    `<span>준서 & 효은</span> +${daysSince}day 💕`;
+
+  const listEl = document.getElementById('anniList');
+  listEl.innerHTML = '';
+
+  // show: last past, today if any, next 3 upcoming
+  const past = ANNIVERSARIES.filter(a => { const ad = new Date(a.date); ad.setHours(0,0,0,0); return ad < now; });
+  const todayAnni = ANNIVERSARIES.filter(a => { const ad = new Date(a.date); ad.setHours(0,0,0,0); return ad.getTime() === now.getTime(); });
+  const future = ANNIVERSARIES.filter(a => { const ad = new Date(a.date); ad.setHours(0,0,0,0); return ad > now; });
+
+  const show = [];
+  if (past.length > 0) show.push({...past[past.length-1], state:'past'});
+  todayAnni.forEach(a => show.push({...a, state:'today'}));
+  future.slice(0,3).forEach(a => show.push({...a, state:'future'}));
+
+  show.forEach(item => {
+    const chip = document.createElement('div');
+    chip.className = `anni-chip ${item.state}`;
+    const d = new Date(item.date);
+    const dStr = `${d.getMonth()+1}/${d.getDate()}`;
+    const daysLeft = diffDays(now, item.date);
+    let text = item.state === 'past'
+      ? `✓ ${item.label} (${dStr})`
+      : item.state === 'today'
+      ? `🎉 오늘! ${item.label}`
+      : `${item.label} (${dStr}, D-${daysLeft})`;
+    chip.textContent = text;
+    listEl.appendChild(chip);
+  });
+}
+
+/* ── TABS ── */
+const tabsEl = document.getElementById('tabs');
+CATS.forEach(cat => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (cat.id === 'all' ? ' active' : '');
+  btn.dataset.id = cat.id;
+  btn.textContent = cat.label;
+  btn.addEventListener('click', () => {
+    activeTab = cat.id;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.id === cat.id));
+    renderBoard();
+  });
+  tabsEl.appendChild(btn);
+});
+
+/* ── CAT SELECT ── */
+const catSelect = document.getElementById('catSelect');
+CATS.filter(c => c.id !== 'all').forEach(cat => {
+  const opt = document.createElement('option');
+  opt.value = cat.id; opt.textContent = cat.label;
+  catSelect.appendChild(opt);
+});
+
+/* ── CALENDAR NAV ── */
+function updateCalLabel() {
+  const vd = fromViewDate();
+  const dayNames = ['일','월','화','수','목','금','토'];
+  const isToday = viewKey() === todayKey();
+  document.getElementById('calDateLabel').textContent =
+    `${viewDate.y}.${String(viewDate.m).padStart(2,'0')}.${String(viewDate.d).padStart(2,'0')} (${dayNames[vd.getDay()]})${isToday ? ' ✦오늘' : ''}`;
+}
+
+function shiftDay(n) {
+  const d = fromViewDate();
+  d.setDate(d.getDate() + n);
+  viewDate = {y: d.getFullYear(), m: d.getMonth()+1, d: d.getDate()};
+  updateCalLabel(); renderBoard();
+}
+function shiftMonth(n) {
+  let m = viewDate.m + n, y = viewDate.y;
+  while (m > 12) { m -= 12; y++; }
+  while (m < 1)  { m += 12; y--; }
+  const maxD = new Date(y, m, 0).getDate();
+  viewDate = {y, m, d: Math.min(viewDate.d, maxD)};
+  updateCalLabel(); renderBoard();
+}
+function goToday() {
+  const t = new Date();
+  viewDate = {y: t.getFullYear(), m: t.getMonth()+1, d: t.getDate()};
+  updateCalLabel(); renderBoard();
+}
+
+document.getElementById('prevDay').addEventListener('click', () => shiftDay(-1));
+document.getElementById('nextDay').addEventListener('click', () => shiftDay(1));
+document.getElementById('prevMonth').addEventListener('click', () => shiftMonth(-1));
+document.getElementById('nextMonth').addEventListener('click', () => shiftMonth(1));
+document.getElementById('todayBtn').addEventListener('click', goToday);
+
+// keyboard arrows
+document.addEventListener('keydown', e => {
+  if (document.getElementById('modalOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') shiftDay(-1);
+  if (e.key === 'ArrowRight') shiftDay(1);
+});
+
+/* ── MODAL ── */
+const modalOverlay = document.getElementById('modalOverlay');
+document.getElementById('openModalBtn').addEventListener('click', openModal);
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('cancelBtn').addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+
+function openModal() {
+  pendingImgSrc = null;
+  document.getElementById('previewImg').style.display = 'none';
+  document.getElementById('previewPlaceholder').style.display = 'block';
+  document.getElementById('titleInput').value = '';
+  document.getElementById('memoInput').value = '';
+  document.getElementById('fileInput').value = '';
+  modalOverlay.classList.add('open');
+}
+function closeModal() { modalOverlay.classList.remove('open'); }
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingImgSrc = ev.target.result;
+    const img = document.getElementById('previewImg');
+    img.src = pendingImgSrc; img.style.display = 'block';
+    document.getElementById('previewPlaceholder').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+  if (!pendingImgSrc) { showToast('사진을 먼저 선택해주세요! 📷'); return; }
+  const title = document.getElementById('titleInput').value.trim() || '제목 없음';
+  const memo  = document.getElementById('memoInput').value.trim();
+  const catId = catSelect.value;
+  const key   = viewKey();
+  photos.unshift({ id: Date.now(), src: pendingImgSrc, cat: catId, title, memo, dateKey: key });
+  save(); renderBoard(); closeModal();
+  showToast('소중한 순간이 저장됐어요 💕');
+});
+
+/* ── RENDER BOARD ── */
+function renderBoard() {
+  const grid = document.getElementById('cardsGrid');
+  const key = viewKey();
+  let list = photos.filter(p => p.dateKey === key);
+  if (activeTab !== 'all') list = list.filter(p => p.cat === activeTab);
+  grid.innerHTML = '';
+
+  if (list.length === 0) {
+    const vd = fromViewDate();
+    grid.innerHTML = `<div class="empty-board"><span class="big">📌</span><p>${viewDate.y}년 ${viewDate.m}월 ${viewDate.d}일의<br>사진이 아직 없어요<br>위 버튼으로 이 날의 순간을 남겨봐요!</p></div>`;
+    return;
+  }
+
+  list.forEach((photo, i) => {
+    const cat = CATS.find(c => c.id === photo.cat) || CATS[1];
+    const tilt = TILTS[i % TILTS.length];
+    const wrapper = document.createElement('div');
+    wrapper.className = 'card-wrapper';
+    wrapper.style.animationDelay = (i * 0.06) + 's';
+
+    const pin = document.createElement('div');
+    pin.className = 'pushpin';
+    pin.style.setProperty('--pin-color', cat.pin);
+
+    const flipCard = document.createElement('div');
+    flipCard.className = 'flip-card';
+    const flipInner = document.createElement('div');
+    flipInner.className = 'flip-inner';
+
+    const front = document.createElement('div');
+    front.className = 'card-front';
+    front.style.setProperty('--tilt', tilt + 'deg');
+    front.innerHTML = `<img src="${photo.src}" alt="${escHtml(photo.title)}" loading="lazy"><div class="photo-title">${escHtml(photo.title)}</div>`;
+
+    const back = document.createElement('div');
+    back.className = 'card-back';
+    back.style.setProperty('--note-bg', cat.noteBg);
+    back.style.setProperty('--note-accent', cat.noteAccent);
+    back.innerHTML = `
+      <button class="back-delete" data-id="${photo.id}">🗑️</button>
+      <div class="back-category">${cat.label}</div>
+      <div class="back-title">${escHtml(photo.title)}</div>
+      <div class="back-memo">${escHtml(photo.memo) || '메모가 없어요 🌸'}</div>
+      <div class="back-date">${photo.dateKey || ''}</div>
+      <div class="back-hint">↩ 탭해서 돌아가기</div>`;
+
+    back.querySelector('.back-delete').addEventListener('click', e => {
+      e.stopPropagation();
+      if (confirm(`"${photo.title}" 사진을 삭제할까요?`)) {
+        photos = photos.filter(p => p.id !== photo.id);
+        save(); renderBoard();
+        showToast('삭제됐어요');
+      }
+    });
+
+    flipInner.appendChild(front);
+    flipInner.appendChild(back);
+    flipCard.appendChild(flipInner);
+    flipCard.addEventListener('click', () => flipCard.classList.toggle('flipped'));
+    wrapper.appendChild(pin);
+    wrapper.appendChild(flipCard);
+    grid.appendChild(wrapper);
+  });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function save() {
+  try { localStorage.setItem('junseo_heoeun_v3', JSON.stringify(photos)); }
+  catch(e) { showToast('저장 공간이 부족해요 😅'); }
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ── INIT ── */
+renderAnniBanner();
+updateCalLabel();
+renderBoard();
+</script>
+</body>
+</html>
